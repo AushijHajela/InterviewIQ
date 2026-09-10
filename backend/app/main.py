@@ -1,22 +1,25 @@
-from fastapi import FastAPI # type: ignore
+from fastapi import FastAPI
+
+from app.api.routes import health
+from app.core.config import settings
+
 
 app = FastAPI(
-    title="InterviewIQ API",
+    title=settings.app_name,
+    version=settings.app_version,
     description="AI Interview & Career Copilot backend",
-    version="0.1.0",
+)
+
+
+app.include_router(
+    health.router,
+    prefix="/api/v1",
 )
 
 
 @app.get("/")
 def root():
     return {
-        "message": "InterviewIQ API is running",
-        "version": "0.1.0"
-    }
-
-
-@app.get("/health")
-def health_check():
-    return {
-        "status": "healthy"
+        "message": "Welcome to InterviewIQ API",
+        "version": settings.app_version,
     }
